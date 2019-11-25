@@ -66,10 +66,11 @@ docker run -p 8080:8080 openapi_server
 <br>
 <br>
 ## The Following Instructions are for Recreating the Entire Project
-```
+
+
 OpenAPI Specification is an API description format, formerly known as Swagger Specification
 npm is a software registry that contains the required code package to install OpenAPI. 
-```
+
 
 #### First create a folder OpenApi, then go to that folder
 ```
@@ -95,7 +96,7 @@ info:
 servers:
   - url: https://localhost:8080
 	description: Tensorflow Server
-<br>
+
 paths:
   /camera:
 	get:
@@ -107,7 +108,7 @@ paths:
     	#  description: the UUID of the image
      	# schema:
       	#  type: string
-<br>        
+        
   	responses:
     	"200":
       	description: Status 200
@@ -123,8 +124,8 @@ paths:
 openapi-generator generate -i parts.yaml -g python-flask -o /Openapi/local
 ```
 #### This will provide a readme file in the current folder, the “ls” command will confirm. Follow its instructions to get the localhost web server running.
-<br>
-#### There should be several files and folders within the openapi folder. Open the “openapi_server” folder and then “controllers” . Once inside create file named default_controller.py
+
+There should be several files and folders within the openapi folder. Open the “openapi_server” folder and then “controllers” . Once inside create file named default_controller.py
 
 #### Type
 ```
