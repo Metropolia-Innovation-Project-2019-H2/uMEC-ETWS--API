@@ -112,8 +112,14 @@ Your OpenAPI definition lives here:
 ```
 http://localhost:591/openapi.json
 ```
-## Note: The default port for the previous steps is 8080 but the port was occupied so 591 was used
+## Note: The default port for the previous steps is 8080 but the port was occupied so 591 was used. To change the port you want your server to run. follow the below step
+```
+cd openaapi_server
+touch __main__.py
+```
+navigate to the *app.run(port=591)* code inside the main func(): and put your desired port number
 
+ 
 To launch the integration tests, use tox:
 ```
 sudo pip install tox
@@ -124,7 +130,10 @@ There should be several files and folders within the openapi folder. Open the â€
 
 #### Type
 ```
-touch default_controller.py
+cd openapi_server/controllers/
+
+Type touch default_controller.py
+
 ```
 #### Paste the following code when inside the default_controller.py:
 ```
