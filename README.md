@@ -117,7 +117,7 @@ http://localhost:591/openapi.json
 cd openaapi_server
 touch __main__.py
 ```
-navigate to the *app.run(port=591)* code inside the main func(): and put your desired port number
+## navigate to the *app.run(port=591)* code inside the main func(): and put your desired port number
 
  
 To launch the integration tests, use tox:
@@ -135,6 +135,11 @@ cd openapi_server/controllers/
 Type touch default_controller.py
 
 ```
+### Before you run the bellow code install opencv library for reading your raspberry pi camera
+```
+pip3 install opencv-python
+```
+
 #### Paste the following code when inside the default_controller.py:
 ```
 import connexion
