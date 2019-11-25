@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  description: api for getting images from server
+  title: Moose-etws
+  version: "1"
+servers:
+- description: Tensorflow Server
+  url: https://localhost:8080
+paths:
+  /camera:
+    get:
+      description: Retrieve the current camera image.
+      operationId: camera_get
+      responses:
+        200:
+          content:
+            image/jpeg:
+              schema:
+                description: The current camera image.
+                format: binary
+                type: string
+          description: Status 200
+      summary: Get image.
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas: {}
