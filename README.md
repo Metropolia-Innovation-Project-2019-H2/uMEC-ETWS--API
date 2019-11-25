@@ -83,7 +83,40 @@ paths:
 ```
 openapi-generator generate -i parts.yaml -g python-flask -o /Openapi/local
 ```
+-i specifies what file contains your openapi specification
+-g specifies what programming language you are generating for your client or server code
+-o specifies what directory the code should be generated.(if not specified the code is generated in the current working directory)
+
 #### This will provide a readme file in the current folder, the “ls” command will confirm. Follow its instructions to get the localhost web server running.
+### You can skip the below step and follow the instructions on the Readme for a little bit more challenge. But continue onwards with this documentation for detailed instruction on how to run the server
+
+
+## Usage
+To run the server, execute the following from the root directory:
+
+```
+pip3 install -r requirements.txt
+python3 -m openapi_server
+```
+
+and open your browser to here:
+
+```
+http://localhost:591/ui/
+```
+
+Your OpenAPI definition lives here:
+
+```
+http://localhost:591/openapi.json
+```
+## Note: The default port for the previous steps is 8080 but the port was occupied so 591 was used
+
+To launch the integration tests, use tox:
+```
+sudo pip install tox
+tox
+```
 
 There should be several files and folders within the openapi folder. Open the “openapi_server” folder and then “controllers” . Once inside create file named default_controller.py
 
@@ -115,33 +148,6 @@ def camera_get():
 	"""
 	return send_file(f, mimetype='image/jpeg')
 ```
-## Usage
-To run the server, execute the following from the root directory:
-
-```
-pip3 install -r requirements.txt
-python3 -m openapi_server
-```
-
-and open your browser to here:
-
-```
-http://localhost:591/ui/
-```
-
-Your OpenAPI definition lives here:
-
-```
-http://localhost:591/openapi.json
-```
-## Note: The default port for the previous steps is 8080 but the port was occupied so 591 was used
-
-To launch the integration tests, use tox:
-```
-sudo pip install tox
-tox
-```
-
 ## Running with Docker
 
 To run the server on a Docker container, please execute the following from the root directory:
