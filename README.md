@@ -18,8 +18,11 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 
 ## Requirements
 Python 3.5.2+
+<br>
 Raspberry Pi
-Laptop 
+<br>
+Laptop
+<br>
 Usb Camera
 
 
@@ -64,8 +67,8 @@ docker run -p 8080:8080 openapi_server
 ```
 <br>
 <br>
-<br>
-## The Following Instructions are for Recreating the Entire Project
+
+# The Following Instructions are for Recreating the Entire Project
 
 
 OpenAPI Specification is an API description format, formerly known as Swagger Specification
@@ -131,7 +134,7 @@ There should be several files and folders within the openapi folder. Open the â€
 ```
 touch default_controller.py
 ```
-#### Paste the following code when inside the file:
+#### Paste the following code when inside the default_controller.py:
 ```
 import connexion
 import six
