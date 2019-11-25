@@ -164,7 +164,11 @@ def camera_get():
 	"""
 	return send_file(f, mimetype='image/jpeg')
 ```
-## Running with Docker
+
+ After this navigate to your browser and enter this url. http://localhost:yourPort/camera
+ (http://194.110.231.138:591/camera)
+  Everytime you reload the page the server receives a get image requests and u can see your current image being captured and displayed on server.
+ ## Running with Docker
 
 To run the server on a Docker container, please execute the following from the root directory:
 
