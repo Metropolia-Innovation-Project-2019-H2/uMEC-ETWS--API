@@ -70,12 +70,12 @@ OpenAPI Specification is an API description format, formerly known as Swagger Sp
 npm is a software registry that contains the required code package to install OpenAPI. 
 
 
-# First create a folder OpenApi, then go to that folder
+### First create a folder OpenApi, then go to that folder
 mkdir /home/pi/OpenApi
 cd OpenApi
 apt-get install npm
 <br>
-# Then install OpenApi Generator
+#### Then install OpenApi Generator
 npm install @openapitools/openapi-generator-cli -g
 <br>
 # Create parts.yaml with command: 
