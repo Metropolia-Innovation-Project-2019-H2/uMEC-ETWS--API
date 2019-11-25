@@ -10,9 +10,6 @@ is an example of building a OpenAPI-enabled Flask server.
 This is a student project that was made in collaboration with Nokia.
 The goal was to create a localhost server with OpenAPI Generator, that utilizes a usb camera to take pictures remotely and uploads the images to the localhost server.
 
-This is a student project that was made in collaboration with Nokia.
-The goal was to create a localhost server with OpenAPI Generator, that utilizes a usb camera to take pictures remotely and uploads the images to the localhost server.
-
 
 This example uses the [Connexion](https://github.com/zalando/connexion) library on top of Flask.
 
