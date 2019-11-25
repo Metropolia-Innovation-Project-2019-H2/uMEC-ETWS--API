@@ -84,7 +84,9 @@ paths:
 openapi-generator generate -i parts.yaml -g python-flask -o /Openapi/local
 ```
 -i specifies what file contains your openapi specification
+
 -g specifies what programming language you are generating for your client or server code
+
 -o specifies what directory the code should be generated.(if not specified the code is generated in the current working directory)
 
 #### This will provide a readme file in the current folder, the “ls” command will confirm. Follow its instructions to get the localhost web server running.
