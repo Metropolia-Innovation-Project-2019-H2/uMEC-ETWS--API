@@ -35,13 +35,30 @@ Object detection based on tensorflow serving REST API, risk identification and r
 
 
 
+### Moose camera detector setup for raspberry pi 3B+
+First clone into this directory which has been setup by pengdev https://github.com/mooseetws/mooseetws-tensorflow-detection.git
+and then pull the project to your local machine.
+Run the following on your command line
+```
+git clone https://github.com/mooseetws/mooseetws-tensorflow-detection.git
 
+git pull
+```
+Now that you have the project on your local machine you would want to update and upgrade your raspberry pi and install all necessary dependencies.
+```
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install libffi-dev libssl-dev
 
+sudo apt-get install -y python python-pip
 
+sudo pip install docker-compose
+```
+since the project is running on docker we would need to install docker-compose to run camera container.
+```
+sudo pip install docker-compose
 
-
-
-
+```
 
 
 
