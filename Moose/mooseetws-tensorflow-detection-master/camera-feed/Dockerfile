@@ -13,6 +13,7 @@ RUN pip3 install pprintpp
 #RUN pip3 install wheel
 #RUN pip3 install opencv-python
 #RUN import cv2
+#The below code is to manually compile opencv-python inside docker takes about 4-6 hours. But this did not solve the problem it was intended for.
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install apt-utils -y
