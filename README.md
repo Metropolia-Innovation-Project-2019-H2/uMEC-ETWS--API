@@ -219,7 +219,7 @@ for prediction in predictions:
 
 ```
 After this we are ready to build the docker container.
-RUn the following command!
+Run the following command!
 ```
 docker-compose build
 docker-compose up
