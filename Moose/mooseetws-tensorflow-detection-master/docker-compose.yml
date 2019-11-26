@@ -1,0 +1,61 @@
+version: "2.2"
+services:
+  tensorflow-serving:
+    # if running on raspberry pi
+    image: emacski/tensorflow-serving:latest-arm32v7
+    # if running on x86 pc or mac
+    #image: tensorflow/serving:latest
+    container_name: "serve_base"
+    security_opt:
+      - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./home/pi:/home/pi
+      - ./tensorflow-serving/models:/models
+      #- ./tensorflow-serving/models_config:/models/models.config
+    environment:
+      - MODEL_NAME=ssdlite_mobilenet_v2_coco_2018_05_09
+    ports:
+      - "8500:8500"
+      - "8501:8501"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:8501/v1/models/ssdlite_mobilenet_v2_coco_2018_05_09",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+  moose-test:
+
+    build: ./moose_test
+    container_name: "moose_test"
+    
+    volumes:
+      - ./moose_test/images:/images
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    ports:
+      - "5000:5000"
+#  camera-feed:
+#    build: ./camera-feed
+#    container_name: "camera_feed"
+#    cap_add:
+#      - SYS_ADMIN
+#    devices:
+#      - "/dev/video0:/dev/video0"
+#    security_opt:
+#      - apparmor:unconfined
+#    stdin_open: true
+#    tty: true
+#    ports:
+#      - "5000:5000"
+
