@@ -236,9 +236,171 @@ python3 test.py
 You should get a result of your prediction directly to your terminal
 ### RUNNING THE MOOSE DETECTION ON UBUNTU
 
-Because Camera-feed uses opencv for capturing camera image, and even when opencv-python was installed on docker for raspberry pi it  had failed to recognize opencv module.
-Due to this bug we decided to test already saved images using pillow
+Navigate back to the  /mooseetws-tensorflow-detection-master/ directory  and RUn the following command
+```
+nano docker-compose.yml
+```
+make sure your compose file looks like this
+```
+version: "2.2"
+services:
+  tensorflow-serving:
+    # if running on raspberry pi
+    image: emacski/tensorflow-serving:latest-arm32v7
+    # if running on x86 pc or mac
+    #image: tensorflow/serving:latest
+    container_name: "serve_base"
+    security_opt:
+      - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./tensorflow-serving/models:/models
+      #- ./tensorflow-serving/models_config:/models/models.config
+    environment:
+      - MODEL_NAME=ssdlite_mobilenet_v2_coco_2018_05_09
+    ports:
+      - "8500:8500"
+      - "8501:8501"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:8501/v1/models/ssdlite_mobilenet_v2_coco_2018_05_09",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
 
+    
+  camera-feed:
+
+    build: ./camera-feed
+    container_name: "camera-feed"
+
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    ports:
+      - "5000:5000"
+```
+After this save your file and navigate to the camera-feed folder
+ open the dockerfile with nano text-editor and Make sure it looks like this
+ 
+```
+# if running on rapberry pi
+FROM arm32v7/python:3
+# if running on x86 based PC
+#FROM python:3.7
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt install python3-pip
+RUN pip install Pillow
+RUN pip3 install numpy
+RUN pip3 install requests
+RUN pip3 install pprintpp
+RUN pip install opencv-python
+
+COPY start.py /home/demo/start.py
+
+CMD ["python3", "/home/demo/start.py"]
+```
+after this save the Dockerfile and open the start.py with a text-editor.
+Make sure your start.py looks like this!
+```
+import PIL.Image
+import numpy
+import requests
+from pprint import pprint
+import time
+from cv2 import *
+
+TENSORFLOW_SERVING_URL = 'http://localhost:8501/v1/models/ssdlite_mobilenet_v2_coco_2018_05_09:predi$
+MOOSE_REPORT_URL = 'https://mooseetws.herokuapp.com/api/pi/v1/'
+LIGHT_POLE_ID = 1
+
+# hardcode potential threats id and label mapping, took from mscoco_complete_label_map.pbtxt
+obj_dict = {17: 'cat', 18: 'dog', 19: 'horse',
+            20: 'sheep', 21: 'cow', 22: 'elephant', 23: 'bear', 24: 'zebra', 25: 'giraffe'}
+
+
+def report_db(name, score):
+    print('#### report to db: ', name, score, LIGHT_POLE_ID)
+    payload = {'objectType': name,
+               'confidence': score, 'poleId': LIGHT_POLE_ID}
+    start = time.perf_counter()
+    res = requests.post(MOOSE_REPORT_URL, json=payload)
+    print(f'Took {time.perf_counter()-start:.2f}s')
+    pprint(res.json())
+
+
+def read_camera():
+    # read image from usb camera with opencv
+    cam = VideoCapture(0)   # 0 -> index of camera
+    s, img = cam.read()
+    cam.release()
+    image_np = cvtColor(img, COLOR_BGR2RGB)
+
+    # construct post message to use tensorflow service
+    payload = {'instances': [image_np.tolist()]}
+    start = time.perf_counter()
+    res = requests.post(TENSORFLOW_SERVING_URL, json=payload)
+    print(f'Took {time.perf_counter()-start:.2f}s')
+    # pprint(res.json())
+
+    # parse returned json data
+    predictions = res.json()['predictions']
+    print('----Found', len(predictions), 'prediction results')
+    parsedData = []
+    for prediction in predictions:
+        print('----numer of detections:', prediction['num_detections'])
+        for i in range(int(prediction['num_detections'])):
+            obj_class = prediction['detection_classes'][i]
+            obj_score = prediction['detection_scores'][i]
+            # According to mscoco_complete_label_map, big animals are identified from 17-25
+            if obj_class > 16 and obj_class < 26:
+                print("----optential threat:", obj_dict[obj_class],
+                      obj_score)
+                if obj_score > 0.5:
+                    print('--warning !!! found animal, potentially it is a',
+                          obj_dict[obj_class])
+                    report_db(obj_dict[obj_class], obj_score)
+            else:
+                print('----found safe object:', obj_class, obj_score)
+
+time.sleep(5)
+print('waited for a min.')
+r = requests.get(TENSORFLOW_SERVING_URL)
+pprint(r.json())
+
+while True:
+
+        read_camera()
+
+
+```
+After this we are ready to build the docker container.
+RUn the following command!
+```
+docker-compose build
+docker-compose up
+
+```
+You also get a connection error  because tensorflow-serving url is activated on localhost on the local machine but you are trying to curl from docker which has a different network- namespace.
+The problem has not been fixed yet so to check that ur camera detection is working
+Open a new terminal
+### Note: leave the docker-compose up command running and open new terminal
+Navigate to the camera-feed folder and run
+```
+python3 start.py
+```
+You should see texts of prediction showing on your terminal
 
 # OpenAPI generated server
 
